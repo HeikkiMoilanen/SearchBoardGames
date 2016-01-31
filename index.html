@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<!-- Bootstrap --> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="styles/styles.css" />
+<link href='http://fonts.googleapis.com/css?family=Goudy+Bookletter+1911' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="app">
+<head>
+    <title>Rojekti!</title>
+    <script src="Scripts/angular.min.js"></script>
+    <script src="app/app.module.js"></script>
+    <script src="app/main.js"></script>
+
+</head>
+<body ng-controller="Main as vm">
+    <div class="center-container col-sm-8 center-block">
+        <div class="title text-center">HuutoNetin parhaat lautapelit</div>
+        <div class="subtitle text-center">Mitä lautapelejä kannattaa ostaa?</div>
+        <div class="items-container col-sm-10 center-block">
+            <div class="item-container col-sm-11 center-block" ng-repeat="result in vm.huutoNetResults">
+                <div class="item-details-container">
+                    <a href={{result[0].url}}>{{result[0].title}}</a>
+                    <div>Hinta nyt: {{result[0].currentPrice}} €</div>
+                    <div>Loppuu: {{result[0].closingTime}}</div>
+                </div>
+                <img src={{result[0].image}} class="item-image">
+            </div>
+        </div>
+    </div>
+    <ul>
+        <li ng-repeat="result in vm.hotGames">{{result}}</li>
+    </ul>
+    <div>{{vm.hotGames}}</div>
+
+</body>
+</html>
