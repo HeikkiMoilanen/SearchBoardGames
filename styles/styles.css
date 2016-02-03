@@ -33,7 +33,7 @@
     border-top-color: gray;
 }
 
-.item-container {
+.item-list-container {
     float: none;
     overflow: auto;
     display: block;

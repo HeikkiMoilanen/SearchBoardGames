@@ -51,7 +51,8 @@
             }).then(function success(response) {
                 if (response.data.items.length > 0) {
                     var huutoNetResults = parseHuutoNetResponse(response);
-                    vm.huutoNetResults.push(huutoNetResults);
+                    var huutoNetResultWithQuery = {"query": query, "results": huutoNetResults};
+                    vm.huutoNetResults.push(huutoNetResultWithQuery);
                 }
             });
 
