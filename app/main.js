@@ -59,7 +59,8 @@
             function parseHuutoNetResponse(response) {
                 var items = response.data.items;
                 var parsedResults = [];
-                for (var i = 0; i < items.length; i++) {
+                    // show max 5 results for a single item
+                for (var i = 0; i < items.length && i <= 5; i++) {
                     var parsedItem = {}
                     if (items[i].links && items[i].links.alternative) {
                         parsedItem.url = items[i].links.alternative
