@@ -8,14 +8,18 @@
     function main($http) {
         var vm = this;
         var useTestData = false;
+        var cacheExpirationHours = 24;
         init();
 
         function init() {
             vm.getBoardGameGeekData = getBoardGameGeekData;
             vm.getHuutoNetItems = getHuutoNetItems;
+            vm.cacheResults = cacheResults;
             vm.boardGameGeekResults = [];
             vm.huutoNetResults = [];
-            vm.getBoardGameGeekData();
+            if (!getCachedResults()) {
+                vm.getBoardGameGeekData();
+            }
         }
 
         function getBoardGameGeekData() {
@@ -51,8 +55,9 @@
             }).then(function success(response) {
                 if (response.data.items.length > 0) {
                     var huutoNetResults = parseHuutoNetResponse(response);
-                    var huutoNetResultWithQuery = {"query": query, "results": huutoNetResults};
+                    var huutoNetResultWithQuery = { "query": query, "results": huutoNetResults };
                     vm.huutoNetResults.push(huutoNetResultWithQuery);
+                    vm.cacheResults(vm.huutoNetResults);
                 }
             });
 
@@ -94,6 +99,31 @@
                 }
                 return parsedResults;
             }
+        }
+
+        function cacheResults(huutoNetResults) {
+            var cachedResults = { 'timestamp': new Date(), 'huutoNetResults': huutoNetResults };
+            var cachedResultsStr = JSON.stringify(cachedResults);
+            localStorage['cachedResults'] = cachedResultsStr;
+        }
+
+        function getCachedResults() {
+            var cachedResults = JSON.parse(localStorage['cachedResults']);
+            if (!cachedResults) {
+                console.log("didn't find cached results");
+                return false;
+            }
+            var cachedDate = Date.parse(cachedResults['timestamp']);
+            var expirationMilliseconds = vm.cacheExpirationHours * 60 * 60 * 1000;
+            if (new Date() - cachedDate > expirationMilliseconds) {
+                console.log("cache expired");
+                localStorage.removeItem('cachedResults');
+                return false;
+            }
+            console.log('using cache');
+
+            vm.huutoNetResults = cachedResults.huutoNetResults;
+            return true;
         }
 
         function generateTestData() {
