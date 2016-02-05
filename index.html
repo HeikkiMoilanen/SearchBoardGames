@@ -19,17 +19,17 @@
         <div class="title text-center">HuutoNetin parhaat lautapelit</div>
         <div class="subtitle text-center">Mitä lautapelejä kannattaa ostaa?</div>
         <div class="items-container col-sm-10 center-block">
-            <div ng-repeat="result in vm.huutoNetResults">
+            <div ng-repeat="result in vm.huutoNetResults track by $index">
                 <div class="subtitle text-center">Hakusanalla "{{result.query}}" löytyi:</div>
-                    <div class="item-list-container col-sm-11 center-block" ng-repeat="item in result.results">
-                        <div class="item-details-container">
-                            <a href={{item.url}}>{{item.title}}</a>
-                            <div>Hinta nyt: {{item.currentPrice}} €</div>
-                            <div>Loppuuasdf: {{item.closingTime}}</div>
-                        </div>
-                        <img src={{item.image}} class="item-image">
+                <div class="item-list-container col-sm-11 center-block" ng-repeat="item in result.results">
+                    <div class="item-details-container">
+                        <a href={{item.url}}>{{item.title}}</a>
+                        <div>Hinta nyt: {{item.currentPrice}} €</div>
+                        <div>Loppuu: {{item.closingTime}}</div>
                     </div>
+                    <img src={{item.image}} class="item-image">
                 </div>
+            </div>
         </div>
     </div>
     <ul>
