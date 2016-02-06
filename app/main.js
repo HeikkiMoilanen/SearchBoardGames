@@ -108,11 +108,12 @@
         }
 
         function getCachedResults() {
-            var cachedResults = JSON.parse(localStorage['cachedResults']);
-            if (!cachedResults) {
+            if (!localStorage['cachedResults']) {
                 console.log("didn't find cached results");
                 return false;
             }
+            var cachedResults = JSON.parse(localStorage['cachedResults']);
+            
             var cachedDate = Date.parse(cachedResults['timestamp']);
             var expirationMilliseconds = vm.cacheExpirationHours * 60 * 60 * 1000;
             if (new Date() - cachedDate > expirationMilliseconds) {
