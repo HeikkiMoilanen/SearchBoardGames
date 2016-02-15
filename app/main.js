@@ -63,40 +63,34 @@
 
             function parseHuutoNetResponse(response) {
                 var items = response.data.items;
-                var parsedResults = [];
-                    // show max 5 results for a single item
-                for (var i = 0; i < items.length && i <= 5; i++) {
-                    var parsedItem = {}
-                    if (items[i].links && items[i].links.alternative) {
-                        parsedItem.url = items[i].links.alternative
+
+                var parsedResults = _.map(response.data.items, function (item) {
+                    var parsedItem = {
+                        "title": item.title, "currentPrice": item.currentPrice.toFixed(2),
+                        "buyNowPrice": item.buyNowPrice, 
                     }
-                    if (items[i].title) {
-                        parsedItem.title = items[i].title;
+                    if (items.links && items.links.alternative) {
+                        parsedItem.url = item.links.alternative
                     }
-                    if (items[i].currentPrice) {
-                        var currentPrice = items[i].currentPrice;
-                        parsedItem.currentPrice = currentPrice.toFixed(2);
-                    }
-                    if (items[i].buyNowPrice) {
-                        parsedItem.buyNowPrice = items[i].buyNowPrice;
-                    }
-                    if (items[i].closingTime) {
-                        if (Date.parse(items[i].closingTime)) {
-                            var closingTime = new Date(items[i].closingTime);
+                    if (item.closingTime) {
+                        if (Date.parse(item.closingTime)) {
+                            var closingTime = new Date(item.closingTime);
                             var month = ["Tammikuuta", "Helmikuuta", "Maaliskuuta", "Huhtikuuta", "Toukokuuta", "Kesäkuuta",
                                     "Heinäkuuta", "Elokuuta", "Syyskuuta", "Lokakuuta", "Marraskuuta", "Joulukuuta"][closingTime.getMonth()];
                             var dateString = closingTime.getDay() + '. ' + month + ' ' + closingTime.getFullYear();
                             parsedItem.closingTime = dateString;
                         }
                     }
-                    if (items[i].images && items[i].images.length > 0 && items[i].images[0].links) {
-                        parsedItem.image = items[i].images[0].links.thumbnail;
+                    if (item.images && item.images.length > 0 && _.first(item.images).links) {
+                        parsedItem.image = _.first(item.images).links.thumbnail;
                     } else {
                         parsedItem.image = "";
                     }
+                    return parsedItem;
+                });
 
-                    parsedResults[i] = parsedItem;
-                }
+                // show max 5 results for a single item
+                parsedResults = parsedResults.splice(0, 5);
                 return parsedResults;
             }
         }
